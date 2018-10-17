@@ -14,10 +14,9 @@ typedef struct _HevRInputEvent HevRInputEvent;
 
 struct _HevRInputEvent
 {
-	unsigned short type;
-	unsigned short code;
-	unsigned int value;
-} __attribute__((packed));
+    unsigned short type;
+    unsigned short code;
+    unsigned int value;
+} __attribute__ ((packed));
 
 #endif /* __HEV_RINPUT_PROTOCOL_H__ */
-

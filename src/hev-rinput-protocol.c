@@ -8,4 +8,3 @@
  */
 
 #include "hev-rinput-protocol.h"
-
