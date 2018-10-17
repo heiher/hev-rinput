@@ -12,11 +12,10 @@
 
 typedef struct _HevRInputReceiver HevRInputReceiver;
 
-HevRInputReceiver * hev_rinput_receiver_new (void);
+HevRInputReceiver *hev_rinput_receiver_new (void);
 void hev_rinput_receiver_destroy (HevRInputReceiver *self);
 
 void hev_rinput_receiver_run (HevRInputReceiver *self);
 void hev_rinput_receiver_quit (HevRInputReceiver *self);
 
 #endif /* __HEV_RINPUT_RECEIVER_H__ */
-
