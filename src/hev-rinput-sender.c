@@ -270,10 +270,9 @@ hev_rinput_task_entry (void *data)
         len = hev_task_io_read (context->fd, &event, sizeof (event),
                                 task_io_yielder, self);
         if (sizeof (event) != len) {
-            if (-2 == len)
-                break;
-            fprintf (stderr, "Got invalid input event!\n");
-            continue;
+            if (-2 != len)
+                fprintf (stderr, "Got invalid input event!\n");
+            break;
         }
 
         if ((EV_KEY == event.type) && (self->switch_keycode == event.code) &&
