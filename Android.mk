@@ -21,25 +21,19 @@ endif
 ifeq ($(filter $(modules-get-list),hev-task-system),)
     include $(TOP_PATH)/third-part/hev-task-system/Android.mk
 endif
-ifeq ($(filter $(modules-get-list),hev-task-io),)
-    include $(TOP_PATH)/third-part/hev-task-io/Android.mk
-endif
 
 LOCAL_PATH = $(TOP_PATH)
+SRCDIR := $(LOCAL_PATH)/src
+
 include $(CLEAR_VARS)
+include $(LOCAL_PATH)/build.mk
 LOCAL_MODULE    := hev-rinput
-LOCAL_SRC_FILES := \
-	src/hev-config.c \
-	src/hev-main.c \
-	src/hev-rinput-sender.c \
-	src/hev-rinput-receiver.c
+LOCAL_SRC_FILES := $(patsubst $(SRCDIR)/%,src/%,$(SRCFILES))
 LOCAL_C_INCLUDES := \
 	$(LOCAL_PATH)/third-part/ini-parser/src \
-	$(LOCAL_PATH)/third-part/hev-task-system/include \
-	$(LOCAL_PATH)/third-part/hev-task-io/include
+	$(LOCAL_PATH)/third-part/hev-task-system/include
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
 LOCAL_CFLAGS += -mfpu=neon
 endif
-LOCAL_STATIC_LIBRARIES := ini-parser hev-task-system hev-task-io
-include $(BUILD_EXECUTABLE)
-
+LOCAL_STATIC_LIBRARIES := ini-parser hev-task-system
+include $(BUILD_SHARED_LIBRARY)
