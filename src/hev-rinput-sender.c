@@ -59,7 +59,6 @@ struct _HevRInputSender
 static void hev_rinput_task_entry (void *data);
 static void hev_rinput_task_sock_entry (void *data);
 
-static int hev_rinput_get_socket (void);
 static int hev_rinput_get_inputs (HevRInputSender *self);
 
 HevRInputSender *
@@ -81,8 +80,9 @@ hev_rinput_sender_new (void)
     }
     hev_task_ref (self->task_sock);
 
-    self->net_fd = hev_rinput_get_socket ();
+    self->net_fd = hev_task_io_socket_socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (self->net_fd < 0) {
+        fprintf (stderr, "Create socket failed!\n");
         hev_task_unref (self->task_sock);
         hev_free (self);
         return NULL;
@@ -104,28 +104,6 @@ hev_rinput_sender_new (void)
     self->addr.sin_port = htons (hev_config_get_port ());
 
     return self;
-}
-
-static int
-hev_rinput_get_socket (void)
-{
-    int fd;
-    int ret, nonblock = 1;
-
-    fd = socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (fd == -1) {
-        fprintf (stderr, "Create socket failed!\n");
-        return -1;
-    }
-
-    ret = ioctl (fd, FIONBIO, (char *)&nonblock);
-    if (ret == -1) {
-        fprintf (stderr, "Set non-blocking failed!\n");
-        close (fd);
-        return -1;
-    }
-
-    return fd;
 }
 
 static int
@@ -152,7 +130,7 @@ hev_rinput_get_inputs (HevRInputSender *self)
 
         snprintf (buf, 512, "/dev/input/%s", dire->d_name);
 
-        fd = open (buf, O_RDONLY | O_NONBLOCK);
+        fd = hev_task_io_open (buf, O_RDONLY);
         if (-1 == fd)
             continue;
 
