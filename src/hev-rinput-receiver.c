@@ -87,9 +87,9 @@ hev_rinput_get_socket (void)
 {
     int fd;
     struct sockaddr_in addr;
-    int ret, nonblock = 1, reuseaddr = 1;
+    int ret, reuseaddr = 1;
 
-    fd = socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    fd = hev_task_io_socket_socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (fd == -1) {
         fprintf (stderr, "Create socket failed!\n");
         return -1;
@@ -99,12 +99,6 @@ hev_rinput_get_socket (void)
                       sizeof (reuseaddr));
     if (ret == -1) {
         fprintf (stderr, "Set reuse address failed!\n");
-        close (fd);
-        return -1;
-    }
-    ret = ioctl (fd, FIONBIO, (char *)&nonblock);
-    if (ret == -1) {
-        fprintf (stderr, "Set non-blocking failed!\n");
         close (fd);
         return -1;
     }
@@ -126,7 +120,7 @@ hev_rinput_get_socket (void)
 static int
 hev_rinput_get_uinput (void)
 {
-    int fd, i, nonblock = 1;
+    int fd, i;
     struct
     {
         int cmd;
@@ -142,7 +136,7 @@ hev_rinput_get_uinput (void)
     };
     struct uinput_user_dev uin_dev;
 
-    fd = open ("/dev/uinput", O_WRONLY);
+    fd = hev_task_io_open ("/dev/uinput", O_WRONLY);
     if (fd == -1) {
         fprintf (stderr, "Open uinput device failed!\n");
         return -1;
@@ -177,12 +171,6 @@ hev_rinput_get_uinput (void)
 
     if (-1 == ioctl (fd, UI_DEV_CREATE)) {
         fprintf (stderr, "Create uinput device failed!\n");
-        close (fd);
-        return -1;
-    }
-
-    if (-1 == ioctl (fd, FIONBIO, (char *)&nonblock)) {
-        fprintf (stderr, "Set non-blocking failed!\n");
         close (fd);
         return -1;
     }
