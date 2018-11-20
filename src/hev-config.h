@@ -12,7 +12,7 @@
 
 #define MAJOR_VERSION (1)
 #define MINOR_VERSION (5)
-#define MICRO_VERSION (0)
+#define MICRO_VERSION (1)
 
 int hev_config_init (const char *config_path);
 void hev_config_fini (void);
