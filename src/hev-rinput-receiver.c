@@ -221,8 +221,8 @@ hev_rinput_task_entry (void *data)
     HevRInputReceiver *self = data;
     HevTask *task = hev_task_self ();
 
-    hev_task_add_fd (task, self->net_fd, EPOLLIN);
-    hev_task_add_fd (task, self->uin_fd, EPOLLOUT);
+    hev_task_add_fd (task, self->net_fd, POLLIN);
+    hev_task_add_fd (task, self->uin_fd, POLLOUT);
 
     for (;;) {
         ssize_t len;
