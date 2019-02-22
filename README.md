@@ -1,5 +1,7 @@
 # Remote Input Devices Sharing
 
+[![status](https://gitlab.com/hev/hev-rinput/badges/master/pipeline.svg)](https://gitlab.com/hev/hev-rinput/commits/master)
+
 Remote input devices sharing over network for Linux.
 
 ## How to Build
