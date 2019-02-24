@@ -21,8 +21,6 @@ THIRDPARTDIR=third-part
 TARGET=$(BINDIR)/hev-rinput
 THIRDPARTS=$(THIRDPARTDIR)/ini-parser \
 	   $(THIRDPARTDIR)/hev-task-system
-THIRDPART_TARGETS=$(THIRDPARTDIR)/ini-parser/bin/libini-parser.a \
-	   $(THIRDPARTDIR)/hev-task-system/bin/libhev-task-system.a
 
 -include build.mk
 CCSRCS=$(filter %.c,$(SRCFILES))
@@ -42,12 +40,12 @@ ifeq ($(V),1)
 	undefine ECHO_PREFIX
 endif
 
-.PHONY: all clean tp-clean
+.PHONY: all clean tp-build tp-clean
 
 all : $(TARGET)
 
-$(THIRDPART_TARGETS) :
-	@$(foreach dir,$(THIRDPARTS),$(MAKE) --no-print-directory -C $(dir);)
+tp-build : $(THIRDPARTS)
+	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir);)
 
 tp-clean : $(THIRDPARTS)
 	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir) clean;)
@@ -56,7 +54,7 @@ clean : tp-clean
 	$(ECHO_PREFIX) $(RM) -rf $(BINDIR) $(BUILDDIR)
 	@printf $(CLEANMSG) $(PROJECT)
 
-$(TARGET) : $(LDOBJS) $(THIRDPART_TARGETS)
+$(TARGET) : $(LDOBJS) tp-build
 	$(ECHO_PREFIX) mkdir -p $(dir $@)
 	$(ECHO_PREFIX) $(CC) -o $@ $(LDOBJS) $(LDFLAGS)
 	@printf $(LINKMSG) $@
