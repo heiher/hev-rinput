@@ -46,8 +46,8 @@ endif
 
 all : $(TARGET)
 
-$(THIRDPART_TARGETS) : $(THIRDPARTS)
-	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir);)
+$(THIRDPART_TARGETS) :
+	@$(foreach dir,$(THIRDPARTS),$(MAKE) --no-print-directory -C $(dir);)
 
 tp-clean : $(THIRDPARTS)
 	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir) clean;)
