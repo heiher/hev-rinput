@@ -6,7 +6,7 @@ CROSS_PREFIX :=
 PP=$(CROSS_PREFIX)cpp
 CC=$(CROSS_PREFIX)gcc
 STRIP=$(CROSS_PREFIX)strip
-CCFLAGS=-O3 -Wall -Werror \
+CCFLAGS=-O3 -pipe -Wall -Werror $(CFLAGS) \
 		-I$(THIRDPARTDIR)/ini-parser/src \
 		-I$(THIRDPARTDIR)/hev-task-system/include
 LDFLAGS=-L$(THIRDPARTDIR)/ini-parser/bin -lini-parser \
@@ -18,7 +18,7 @@ BINDIR=bin
 BUILDDIR=build
 THIRDPARTDIR=third-part
 
-TARGET=$(BINDIR)/hev-rinput
+TARGET=$(BINDIR)/$(PROJECT)
 THIRDPARTS=$(THIRDPARTDIR)/ini-parser \
 	   $(THIRDPARTDIR)/hev-task-system
 
@@ -34,6 +34,11 @@ LINKMSG="\e[1;34mLINK\e[0m  \e[1;32m%s\e[0m\n"
 STRIPMSG="\e[1;34mSTRIP\e[0m \e[1;32m%s\e[0m\n"
 CLEANMSG="\e[1;34mCLEAN\e[0m %s\n"
 
+ENABLE_STATIC :=
+ifeq ($(ENABLE_STATIC),1)
+	CCFLAGS+=-static
+endif
+
 V :=
 ECHO_PREFIX := @
 ifeq ($(V),1)
@@ -45,7 +50,7 @@ endif
 all : $(TARGET)
 
 tp-build : $(THIRDPARTS)
-	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir);)
+	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir) static;)
 
 tp-clean : $(THIRDPARTS)
 	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir) clean;)
@@ -56,14 +61,14 @@ clean : tp-clean
 
 $(TARGET) : $(LDOBJS) tp-build
 	$(ECHO_PREFIX) mkdir -p $(dir $@)
-	$(ECHO_PREFIX) $(CC) -o $@ $(LDOBJS) $(LDFLAGS)
+	$(ECHO_PREFIX) $(CC) $(CCFLAGS) -o $@ $(LDOBJS) $(LDFLAGS)
 	@printf $(LINKMSG) $@
 	$(ECHO_PREFIX) $(STRIP) $@
 	@printf $(STRIPMSG) $@
 
 $(BUILDDIR)/%.dep : $(SRCDIR)/%.c
 	$(ECHO_PREFIX) mkdir -p $(dir $@)
-	$(ECHO_PREFIX) $(PP) $(CCFLAGS) -MM -MT$(@:.dep=.o) -MF$@ $< 2> /dev/null
+	$(ECHO_PREFIX) $(PP) $(CCFLAGS) -MM -MT$(@:.dep=.o) -MF$@ $< 2>/dev/null
 
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	$(ECHO_PREFIX) mkdir -p $(dir $@)
