@@ -24,24 +24,26 @@ ndk-build
 ## How to Use
 
 **Receiver**:
-```bash
-cat conf/main.ini
+```ini
+; conf/main.ini
 [Main]
 Port=6380
 Address=0.0.0.0
-
+```
+```bash
 sudo bin/hev-rinput conf/main.ini
 ```
 
 **Sender**:
-```bash
-cat conf/main.ini
+```ini
+; conf/main.ini
 [Main]
 Port=6380
 Address=192.168.1.2
 ; See /usr/include/linux/input-event-codes.h
 SwitchKeyCode=119
-
+```
+```bash
 sudo bin/hev-rinput conf/main.ini
 ```
 
@@ -51,4 +53,4 @@ sudo bin/hev-rinput conf/main.ini
 
 ## License
 
-LGPL
+MIT
