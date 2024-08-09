@@ -1,6 +1,6 @@
 # Remote Input Devices Sharing
 
-[![status](https://gitlab.com/hev/hev-rinput/badges/master/pipeline.svg)](https://gitlab.com/hev/hev-rinput/commits/master)
+[![status](https://github.com/heiher/hev-rinput/actions/workflows/build.yaml/badge.svg?branch=master&event=push)](https://github.com/heiher/hev-rinput)
 
 Remote input devices sharing over network for Linux.
 
@@ -46,7 +46,9 @@ sudo bin/hev-rinput conf/main.ini
 ```
 
 ## Authors
-* **Heiher** - https://hev.cc
+
+* **hev** - https://hev.cc
 
 ## License
+
 LGPL
