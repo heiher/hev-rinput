@@ -240,8 +240,13 @@ hev_rinput_task_entry (void *data)
         }
 
         if (EV_REL == revent.type) {
-            if (-1 == gettimeofday (&event.time, NULL))
+            struct timeval tv;
+
+            if (-1 == gettimeofday (&tv, NULL))
                 continue;
+
+            event.input_event_sec = tv.tv_sec;
+            event.input_event_usec = tv.tv_usec;
         }
 
         event.type = revent.type;
