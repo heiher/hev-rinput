@@ -23,6 +23,7 @@ THIRDPARTS=$(THIRDPARTDIR)/ini-parser \
 	   $(THIRDPARTDIR)/hev-task-system
 
 -include build.mk
+TPFLAGS=ENABLE_STACK_OVERFLOW_DETECTOR=1
 CCSRCS=$(filter %.c,$(SRCFILES))
 ASSRCS=$(filter %.S,$(SRCFILES))
 LDOBJS=$(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(CCSRCS)) \
@@ -56,7 +57,7 @@ endif
 all : $(TARGET)
 
 tp-build : $(THIRDPARTS)
-	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir) static;)
+	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir) $(TPFLAGS) static;)
 
 tp-clean : $(THIRDPARTS)
 	@$(foreach dir,$^,$(MAKE) --no-print-directory -C $(dir) clean;)
