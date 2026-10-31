@@ -1,6 +1,6 @@
 # Remote Input Devices Sharing
 
-[![status](https://github.com/heiher/hev-rinput/actions/workflows/build.yaml/badge.svg?branch=main&event=push)](https://github.com/heiher/hev-rinput)
+[![status](https://github.com/heiher/hev-rinput/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/heiher/hev-rinput)
 
 Remote input devices sharing over network for Linux.
 
